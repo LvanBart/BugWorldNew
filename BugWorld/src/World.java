@@ -53,7 +53,7 @@ public class World {
 		
 		scan.close(); */
 		
-		int numBugs = 1;
+		int numBugs = 20;
 		int numPlants = 20;
 		int numObstacles = 20;
 		

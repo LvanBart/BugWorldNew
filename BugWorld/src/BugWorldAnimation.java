@@ -53,13 +53,8 @@ public class BugWorldAnimation extends Application {
 		// add all objects to group
 		Group root = new Group();
 		root.getChildren().addAll(objects);
-		
-		for (Bug bug: bugs) {
-			Circle circle = bug.getCircle();
-			circle.setTranslateX(bug.getX() * enlargementFactor);
-			circle.setTranslateY(bug.getY() * enlargementFactor);
 			
-		}
+
 		
 		Scene scene = new Scene(root, width + enlargementFactor/2, height + enlargementFactor/2);
 		KeyFrame frame = new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>() {
@@ -76,11 +71,13 @@ public class BugWorldAnimation extends Application {
 					int prevY = bug.getPrevY() * enlargementFactor;
 					int curY = bug.getY() * enlargementFactor;
 					
-					// circle.setTranslateX(curX - prevX);
-					// circle.setTranslateY(curY - prevY);
+					 //circle.setTranslateX(circle.getTranslateX() + (curX - prevX));
+					 //circle.setTranslateY(circle.getTranslateY() + (curY - prevY));
+					circle.setCenterX(curX);
+					circle.setCenterY(curY);
 					
 					//System.out.println("" + prevX + " " + curX + ", " + prevY + " " + curY + " ");
-					//System.out.println("" + (curX - prevX));
+					System.out.println("" + (circle.getTranslateX() + (curX - prevX)));
 
 				}
 				
