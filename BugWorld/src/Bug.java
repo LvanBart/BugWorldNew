@@ -1,7 +1,7 @@
 
 import java.util.Scanner;
 
-import javafx.scene.shape.Circle;
+import javafx.scene.image.ImageView;
 
 public class Bug {
 
@@ -13,9 +13,7 @@ public class Bug {
 	protected int energy;
 	protected int id;
 	protected int smellRange;
-	protected Circle circle;
-	protected int prevX;
-	protected int prevY;
+	protected ImageView image;
 
 	// constructors
 
@@ -26,8 +24,6 @@ public class Bug {
 		this.symbol = 'B';
 		this.x = 1;
 		this.y = 1;
-		this.prevX = this.x;
-		this.prevY = this.y;
 		this.energy = 100;
 		this.id = 12345;
 		this.smellRange = 2;
@@ -40,8 +36,6 @@ public class Bug {
 		this.symbol = symbol;
 		this.x = x;
 		this.y = y;
-		this.prevX = this.x;
-		this.prevY = this.y;
 		this.energy = energy;
 		this.id = id;
 		this.smellRange = smellRange;
@@ -80,14 +74,6 @@ public class Bug {
 	public int getY() {
 		return this.y;
 	}
-	
-	public int getPrevX() {
-		return this.prevX;
-	}
-	
-	public int getPrevY() {
-		return this.prevY;
-	}
 
 	public int getEnergy() {
 		return this.energy;
@@ -96,9 +82,9 @@ public class Bug {
 	public int getId() {
 		return this.id;
 	}
-	
-	public Circle getCircle() {
-		return this.circle;
+
+	public ImageView getImage() {
+		return this.image;
 	}
 
 	// setters
@@ -130,9 +116,9 @@ public class Bug {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	public void setCircle(Circle circle) {
-		this.circle = circle;
+
+	public void setImage(ImageView image) {
+		this.image = image;
 	}
 
 	// other methods
@@ -142,9 +128,7 @@ public class Bug {
 	 * bounds, positions bug at edge of border
 	 */
 	public void move(String direction, int distance, int maxX, int maxY) {
-		this.prevX = x;
-		this.prevY = y;
-		
+
 		if (direction.equals("N")) {
 			this.y -= distance;
 			if (this.y < 1) {
@@ -167,7 +151,7 @@ public class Bug {
 			}
 
 		}
-		
+
 
 	}
 
@@ -210,52 +194,52 @@ public class Bug {
 		scan.close();
 
 	}
-	
+
 	/* returns the direction in which there is food within the specified range of the bug
 	 * if the bug doesn't smell food, returns "none"
 	 * priority is given to North, then South, then East, then West
 	 * bugs do not smell plants which are size 0
 	 */
 	public String smellFood(World world) {
-		
+
 		for (int curDistance = 1; curDistance <= this.smellRange; curDistance++ ) {
 			int curX = 1;
 			int curY = 1;
-			
+
 			// north
 			curX = this.x;
 			curY = this.y - curDistance;
-					
+
 			if (world.getPlantAt(curX, curY) != null && world.getPlantAt(curX, curY).getSize() > 0) {
 				return "N";
 			}
-			
+
 			// south
 			curX = this.x;
 			curY = this.y + curDistance;
-					
+
 			if (world.getPlantAt(curX, curY) != null && world.getPlantAt(curX, curY).getSize() > 0) {
 				return "S";
 			}
-			
+
 			// east
 			curX = this.x + curDistance;
 			curY = this.y;
-					
+
 			if (world.getPlantAt(curX, curY) != null && world.getPlantAt(curX, curY).getSize() > 0) {
 				return "E";
 			}
-			
+
 			// west
 			curX = this.x - curDistance;
 			curY = this.y;
-					
+
 			if (world.getPlantAt(curX, curY) != null && world.getPlantAt(curX, curY).getSize() > 0) {
 				return "W";
 			}
 		}
-		
-		
+
+
 		return "none";
 	}
 

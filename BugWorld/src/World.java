@@ -3,7 +3,7 @@ import java.util.ArrayList;
 // import java.util.Scanner;
 
 public class World {
-	private char[] symbols = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 't', 'u'}; 
+	private char[] symbols = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 't', 'u'};
 	private ArrayList<Bug> bugs;
 	private ArrayList<Plant> plants;
 	private ArrayList<Obstacle> obstacles;
@@ -18,13 +18,13 @@ public class World {
 		this.worldHeight = height;
 		this.worldWidth = width;
 
-		
+
 		// set up text based menu
-		/*Scanner scan = new Scanner(System.in); 
-		
+		/*Scanner scan = new Scanner(System.in);
+
 		System.out.println("How many times do you want world to refresh?: ");
 		int numRefreshes = scan.nextInt();
-		
+
 		System.out.println("Enter number of bugs (max 20): ");
 		int numBugs = scan.nextInt();
 		if (numBugs < 0) {
@@ -33,58 +33,58 @@ public class World {
 		if (numBugs > 20) {
 			numBugs = 20;
 		}
-		
+
 		System.out.println("Enter number of plants: ");
 		int numPlants = scan.nextInt();
 		if (numPlants < 0) {
 			numPlants = 0;
 		}
-		
+
 		System.out.println("Enter number of obstacles: ");
 		int numObstacles = scan.nextInt();
-		
+
 		System.out.println("Enter world width: ");
 		int worldWidth = scan.nextInt();
 		this.width = worldWidth;
-		
+
 		System.out.println("Enter world height: ");
 		int worldHeight = scan.nextInt();
 		this.height = worldHeight;
-		
+
 		scan.close(); */
-		
+
 		int numBugs = 20;
 		int numPlants = 20;
-		int numObstacles = 20;
-		
+		int numObstacles = 40;
+
 		// create bugs (with random positions), add to bugs ArrayList
 		for (int i = 0; i < numBugs; i++) {
 			int x = 1 + (int)(Math.random() * worldWidth);
 			int y = 1 + (int)(Math.random() * worldHeight);
 			char bugSymbol = symbols[i];
-			
+
 			Bug bug = new Bug("ant", "Bob", bugSymbol, x, y, 50, 123, 2);
 			this.bugs.add(bug);
 		}
-		
+
 		// create plants (all start at size 0) at random positions
 		for (int i = 0; i < numPlants; i++) {
 			int x = 1 + (int)(Math.random() * worldWidth);
 			int y = 1 + (int)(Math.random() * worldHeight);
-			
+
 			this.plants.add(new Plant(0, x, y));
 		}
-		
+
 		// create obstacles at random positions
 		for (int i = 0; i < numObstacles; i++) {
 			int x = 1 + (int)(Math.random() * worldWidth);
 			int y = 1 + (int)(Math.random() * worldHeight);
-			
+
 			this.obstacles.add(new Obstacle(x, y));
 		}
-		
+
 		this.drawWorld();
-		
+
 		// refresh world specified number of times
 		/* for (int i = 0; i < numRefreshes; i++) {
 			this.updateWorld();
@@ -152,12 +152,12 @@ public class World {
 		// make each bug move
 		for (Bug b : this.bugs) {
 			String direction = b.smellFood(this);
-			
+
 			// if bug doesn't smell food, pick random direction
 			if (direction.equals("none")) {
-			
+
 				double randNum = Math.random();
-				
+
 				if (randNum < 0.25) {
 					direction = "N";
 				} else if (randNum < 0.5) {
@@ -168,17 +168,17 @@ public class World {
 					direction = "W";
 				}
 			}
-			
+
 			moveBug(b, direction);
 		}
-		
+
 		// make plants grow
 		for (Plant p: this.plants) {
 			p.grow();
 		}
 
 	}
-	
+
 	/*
 	 * moves the bug in specified direction, if the space there is free
 	 * if there is a plant there, bug eats the plant
@@ -189,7 +189,7 @@ public class World {
 		int bugY = b.getY();
 		int bugNewX = 1;
 		int bugNewY = 1;
-		
+
 		// north
 		if (direction.equals("N")) {
 			bugNewX = bugX;
@@ -206,38 +206,38 @@ public class World {
 		} else if (direction.equals("S")) {
 			bugNewX = bugX;
 			bugNewY = bugY + 1;
-			
+
 			if (getPlantAt(bugNewX, bugNewY) != null) {
 				getPlantAt(bugNewX, bugNewY).shrink();
 			} else if (getBugAt(bugNewX, bugNewY) == null && !obstacleAt(bugNewX, bugNewY)) {
 				b.move("S", 1, worldWidth, worldHeight);
 			}
-		
+
 		// east
 		} else if (direction.equals("E")) {
 			bugNewX = bugX + 1;
 			bugNewY = bugY;
-			
+
 			if (getPlantAt(bugNewX, bugNewY) != null) {
 				getPlantAt(bugNewX, bugNewY).shrink();
 			} else if (getBugAt(bugNewX, bugNewY) == null && !obstacleAt(bugNewX, bugNewY)) {
 				b.move("E", 1, worldWidth, worldHeight);
 			}
-			
+
 		// west
 		} else {
 			bugNewX = bugX - 1;
 			bugNewY = bugY;
-			
+
 			if (getPlantAt(bugNewX, bugNewY) != null) {
 				getPlantAt(bugNewX, bugNewY).shrink();
 			} else if (getBugAt(bugNewX, bugNewY) == null && !obstacleAt(bugNewX, bugNewY)) {
 				b.move("W", 1, worldWidth, worldHeight);
-			}	
+			}
 		}
-		
+
 	}
-	
+
 	/*
 	 * returns the bug which is at the specified location
 	 */
@@ -252,8 +252,8 @@ public class World {
 
 		return bugAt;
 	}
-	
-	
+
+
 	/*
 	 * returns whether there is an obstacle at the specified location
 	 */
@@ -265,7 +265,7 @@ public class World {
 		}
 		return false;
 	}
-	
+
 	/*
 	 * returns the plant which as at the specified location
 	 */
@@ -280,16 +280,16 @@ public class World {
 
 		return plantAt;
 	}
-	
+
 	// getters
 	public ArrayList<Bug> getBugs() {
 		return this.bugs;
 	}
-	
+
 	public ArrayList<Plant> getPlants() {
 		return this.plants;
 	}
-	
+
 	public ArrayList<Obstacle> getObstacles() {
 		return this.obstacles;
 	}
