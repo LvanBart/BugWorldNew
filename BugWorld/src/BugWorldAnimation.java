@@ -2,17 +2,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.TimelineBuilder;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -66,11 +70,12 @@ public class BugWorldAnimation extends Application {
 			images.add(i);
 		}
 
+
 		// add all objects to group
 		Group root = new Group();
 		root.getChildren().addAll(images);
 
-		Scene scene = new Scene(root, width + enlargementFactor, height + enlargementFactor);
+		Scene scene = new Scene(root, width + enlargementFactor, height + enlargementFactor + 60);
 		KeyFrame frame = new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>() {
 
 			@Override
@@ -100,7 +105,53 @@ public class BugWorldAnimation extends Application {
 			}
 		});
 
-		TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build().play();
+		Timeline tl = new Timeline(frame);
+		tl.setCycleCount(javafx.animation.Animation.INDEFINITE);
+		tl.play();
+
+		// add buttons
+		Button playBtn = new Button("Play");
+		playBtn.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		playBtn.setTextFill(Color.WHITE);
+		playBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				tl.play();
+			}
+		});
+
+		Button pauseBtn = new Button("Pause");
+		pauseBtn.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+		pauseBtn.setTextFill(Color.WHITE);
+		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				tl.pause();
+			}
+		});
+
+		Button stopBtn = new Button("Stop");
+		stopBtn.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+		stopBtn.setTextFill(Color.WHITE);
+		stopBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				tl.stop();
+			}
+		});
+
+		HBox buttons = new HBox();
+		buttons.getChildren().add(playBtn);
+		buttons.getChildren().add(pauseBtn);
+		buttons.getChildren().add(stopBtn);
+
+		buttons.setLayoutY(height + enlargementFactor + 25);
+		buttons.setLayoutX(10);
+		buttons.setSpacing(10);
+		root.getChildren().add(buttons);
 
 		primaryStage.setTitle("Bug World");
 		primaryStage.setScene(scene);
