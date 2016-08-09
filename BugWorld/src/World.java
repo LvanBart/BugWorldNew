@@ -45,9 +45,9 @@ public class World {
 		 * scan.close();
 		 */
 
-		int numBugs = 30;
-		int numPlants = 30;
-		int numObstacles = 30;
+		int numBugs = 15;
+		int numPlants = 40;
+		int numObstacles = 20;
 
 		/*
 		 * PRINT VERSION // create bugs (with random positions), add to bugs
@@ -61,96 +61,37 @@ public class World {
 
 		// make approx equal number of each type of bug (general, crawling,
 		// jumping, flying)
-		for (int i = 0; i < numBugs; i++) {
-			int x = 1 + (int) (Math.random() * worldWidth);
-			int y = 1 + (int) (Math.random() * worldHeight);
-			
-			while (!cellEmpty(x, y)) {
-				x = 1 + (int) (Math.random() * worldWidth);
-				y = 1 + (int) (Math.random() * worldHeight);
-			}
-			
-			Bug bug1 = new Bug();
-			bug1.setX(x);
-			bug1.setY(y);
+		
+		int curNumBugs = 0;
+		while (curNumBugs < numBugs) {
+			addObject('B');
+			curNumBugs++;
 
-			this.bugs.add(bug1);
-			i++;
-
-			if (i < numBugs) {
-				x = 1 + (int) (Math.random() * worldWidth);
-				y = 1 + (int) (Math.random() * worldHeight);
-				
-				while (!cellEmpty(x, y)) {
-					x = 1 + (int) (Math.random() * worldWidth);
-					y = 1 + (int) (Math.random() * worldHeight);
-				}
-				
-				Bug bug2 = new CrawlingBug();
-				this.bugs.add(bug2);
-				bug2.setX(x);
-				bug2.setY(y);
-				i++;
+			if (curNumBugs < numBugs) {
+				addObject('C');
+				curNumBugs++;
 			}
 
-			if (i < numBugs) {
-				x = 1 + (int) (Math.random() * worldWidth);
-				y = 1 + (int) (Math.random() * worldHeight);
-				
-				while (!cellEmpty(x, y)) {
-					x = 1 + (int) (Math.random() * worldWidth);
-					y = 1 + (int) (Math.random() * worldHeight);
-				}
-				
-				Bug bug3 = new JumpingBug();
-				this.bugs.add(bug3);
-				bug3.setX(x);
-				bug3.setY(y);
-				i++;
+			if (curNumBugs < numBugs) {
+				addObject('J');
+				curNumBugs++;
 			}
 
-			if (i < numBugs) {
-				x = 1 + (int) (Math.random() * worldWidth);
-				y = 1 + (int) (Math.random() * worldHeight);
-				
-				while (!cellEmpty(x, y)) {
-					x = 1 + (int) (Math.random() * worldWidth);
-					y = 1 + (int) (Math.random() * worldHeight);
-				}
-				
-				Bug bug4 = new FlyingBug();
-				this.bugs.add(bug4);
-				bug4.setX(x);
-				bug4.setY(y);
-				i++;
+			if (curNumBugs < numBugs) {
+				addObject('F');
+				curNumBugs++;
 			}
 
 		}
 
 		// create plants (all start at size 100) at random positions
 		for (int i = 0; i < numPlants; i++) {
-			int x = 1 + (int) (Math.random() * worldWidth);
-			int y = 1 + (int) (Math.random() * worldHeight);
-			
-			while (!cellEmpty(x, y)) {
-				x = 1 + (int) (Math.random() * worldWidth);
-				y = 1 + (int) (Math.random() * worldHeight);
-			}
-
-			this.plants.add(new Plant(100, x, y));
+			addObject('P');
 		}
 
 		// create obstacles at random positions
 		for (int i = 0; i < numObstacles; i++) {
-			int x = 1 + (int) (Math.random() * worldWidth);
-			int y = 1 + (int) (Math.random() * worldHeight);
-			
-			while (!cellEmpty(x, y)) {
-				x = 1 + (int) (Math.random() * worldWidth);
-				y = 1 + (int) (Math.random() * worldHeight);
-			}
-
-			this.obstacles.add(new Obstacle(x, y));
+			addObject('O');
 		}
 
 		this.drawWorld();
@@ -420,7 +361,7 @@ public class World {
 	}
 	
 	public void addObject(char objectSymbol) {
-		if (getAllObjects().size() >= worldWidth * worldHeight) {
+		if (getAllObjects().size() >= (worldWidth * worldHeight)) {
 			return;
 		}
 		

@@ -40,7 +40,7 @@ public class Plant extends BugWorldObject{
 
 	// causes plant's size to increase by 1, to a maximum of 9
 	public void grow () {
-			this.size += 3;
+			this.size += 4;
 	}
 	
 	// causes plant's size to decrease by 2, to a minimum of 0
