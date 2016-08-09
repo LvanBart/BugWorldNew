@@ -1,5 +1,6 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,7 +24,7 @@ import javafx.util.Duration;
 public class BugWorldAnimation extends Application {
 
 	int width = 600, height = 600;
-	int enlargementFactor = 20;
+	int enlargementFactor = 30;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -37,19 +38,31 @@ public class BugWorldAnimation extends Application {
 		List<Obstacle> obstacles = world1.getObstacles();
 
 
-		// make objects squares (different colour for each type of object)
-		List<ImageView> images = new ArrayList<ImageView>();
+		// List<ImageView> images = new ArrayList<ImageView>();
+		Map<ImageView, BugWorldObject> images = new HashMap<ImageView, BugWorldObject>();
+		
 
 		for (Bug b: bugs) {
-			//Circle c = new Circle(b.getX() * enlargementFactor, b.getY() * enlargementFactor, enlargementFactor / 2, Color.RED);
-			ImageView i = new ImageView(new Image(getClass().getResourceAsStream("bug_image.png")));
+			// for general bug
+			String fileName = "bug_image.png";
+			
+			// if crawlingBug
+			if (b.getSymbol() == 'C') {
+				fileName = "crawling_bug_image.png";
+			} else if (b.getSymbol() == 'J') {
+				fileName = "jumping_bug_image.png";
+			} else if (b.getSymbol() == 'F') {
+				fileName = "flying_bug_image.png";
+			}
+			
+			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
+			
 			i.setFitWidth(enlargementFactor);
 			i.setFitHeight(enlargementFactor);
 			i.setX(b.getX() * enlargementFactor);
 			i.setY(b.getY() * enlargementFactor);
 
-			b.setImage(i);
-			images.add(i);
+			images.put(i, b);
 		}
 
 		for (Plant p: plants) {
@@ -58,22 +71,33 @@ public class BugWorldAnimation extends Application {
 			i.setFitHeight(enlargementFactor);
 			i.setX(p.getX() * enlargementFactor);
 			i.setY(p.getY() * enlargementFactor);
-			images.add(i);
+			
+			images.put(i, p);
 		}
 
 		for (Obstacle o: obstacles) {
-			ImageView i = new ImageView(new Image(getClass().getResourceAsStream("wall_image.png")));
+			String fileName = "wall_image.png";
+			
+			if (o.getSymbol() == 'X') {
+				fileName = "tombstone_image";
+			}
+			
+			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
 			i.setFitWidth(enlargementFactor);
 			i.setFitHeight(enlargementFactor);
 			i.setX(o.getX() * enlargementFactor);
 			i.setY(o.getY() * enlargementFactor);
-			images.add(i);
+			
+			images.put(i, o);
 		}
 
 
 		// add all objects to group
 		Group root = new Group();
-		root.getChildren().addAll(images);
+		
+		for (ImageView i: images.keySet()) {
+			root.getChildren().add(i);
+		}
 
 		Scene scene = new Scene(root, width + enlargementFactor, height + enlargementFactor + 60);
 		KeyFrame frame = new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>() {
@@ -81,24 +105,14 @@ public class BugWorldAnimation extends Application {
 			@Override
 			public void handle(ActionEvent t) {
 				world1.updateWorld();
-
-				for (Bug bug: bugs) {
-					ImageView image = bug.getImage();
-
-					int curX = bug.getX() * enlargementFactor;
-					int curY = bug.getY() * enlargementFactor;
-
-					 //circle.setTranslateX(circle.getTranslateX() + (curX - prevX));
-					 //circle.setTranslateY(circle.getTranslateY() + (curY - prevY));
-					image.setX(curX);
-					image.setY(curY);
-
-					//circle.setCenterX(curX);
-					//circle.setCenterY(curY);
-
-					//System.out.println("" + prevX + " " + curX + ", " + prevY + " " + curY + " ");
-					//System.out.println("" + (circle.getTranslateX() + (curX - prevX)));
-
+				
+				
+				for (ImageView i: images.keySet()) {
+					int newX = images.get(i).getX();
+					int newY = images.get(i).getY();
+					
+					i.setX(newX * enlargementFactor);
+					i.setY(newY * enlargementFactor);
 				}
 
 
@@ -158,9 +172,6 @@ public class BugWorldAnimation extends Application {
 		primaryStage.show();
 	}
 
-	public void updateObjects() {
-
-	}
 
 	public static void main(String[] args) {
 		launch(args);

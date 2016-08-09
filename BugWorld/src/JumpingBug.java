@@ -8,8 +8,9 @@ public class JumpingBug extends Bug {
 		this.smellRange = 3;
 	}
 	
-	public JumpingBug(String species, String name, char symbol, int x, int y, int energy, int id) {
-		super(species, name, symbol, x, y, energy, id, 3);
+	public JumpingBug(String species, String name, int x, int y, int energy, int id) {
+		super(species, name, x, y, energy, id, 3);
+		this.setSymbol('J');
 	}
 	
 	

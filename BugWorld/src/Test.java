@@ -7,9 +7,9 @@ public class Test {
 		
 		// create new bugs
 		Bug bug1 = new Bug();
-		Bug bug2 = new Bug("cockroach", "Penelope", 'C', 150, 150, 23, 73645, 2);
+		Bug bug2 = new Bug();
 		Bug bug3 = new Bug();
-		Bug bug4 = new Bug("ladybug", "John", 'L', 200, 200, 95, 45377, 2);
+		Bug bug4 = new Bug();
 		
 		// add bugs to new array
 		ArrayList<Bug> bugs = new ArrayList<Bug>();

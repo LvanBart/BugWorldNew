@@ -3,17 +3,13 @@ import java.util.Scanner;
 
 import javafx.scene.image.ImageView;
 
-public class Bug {
+public class Bug extends BugWorldObject {
 
 	protected String species;
 	protected String name;
-	protected char symbol;
-	protected int x;
-	protected int y;
 	protected int energy;
 	protected int id;
 	protected int smellRange;
-	protected ImageView image;
 
 	// constructors
 
@@ -30,10 +26,10 @@ public class Bug {
 
 	}
 
-	public Bug(String species, String name, char symbol, int x, int y, int energy, int id, int smellRange) {
+	public Bug(String species, String name, int x, int y, int energy, int id, int smellRange) {
 		this.species = species;
 		this.name = name;
-		this.symbol = symbol;
+		this.symbol = 'B';
 		this.x = x;
 		this.y = y;
 		this.energy = energy;
@@ -63,10 +59,6 @@ public class Bug {
 		return this.name;
 	}
 
-	public char getSymbol() {
-		return this.symbol;
-	}
-
 	public int getX() {
 		return this.x;
 	}
@@ -83,9 +75,6 @@ public class Bug {
 		return this.id;
 	}
 
-	public ImageView getImage() {
-		return this.image;
-	}
 
 	// setters
 
@@ -117,9 +106,6 @@ public class Bug {
 		this.id = id;
 	}
 
-	public void setImage(ImageView image) {
-		this.image = image;
-	}
 
 	// other methods
 
@@ -241,6 +227,19 @@ public class Bug {
 
 
 		return "none";
+	}
+	
+	public void eatPlant(Plant plant) {
+		if (plant.getSize() == 0 || this.energy >= 100) {
+			return;
+		}
+		
+		this.energy += 10;
+		if (this.energy > 100) {
+			this.energy = 100;
+		}
+		
+		plant.shrink();
 	}
 
 }

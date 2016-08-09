@@ -1,5 +1,5 @@
 
-public class Plant {
+public class Plant extends BugWorldObject{
 	private int size;
 	private int x;
 	private int y;
@@ -8,6 +8,7 @@ public class Plant {
 		this.size = 0;
 		this.x = 1;
 		this.y = 1;
+		this.symbol = 'P';
 	}
 
 	public Plant(int size, int x, int y) {
@@ -21,6 +22,7 @@ public class Plant {
 
 		this.x = x;
 		this.y = y;
+		this.symbol = 'P';
 	}
 
 	// getters
