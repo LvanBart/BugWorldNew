@@ -7,7 +7,7 @@ public class World {
 	// private char[] symbols = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
 	// 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 't', 'u'};
 	private List<Bug> bugs;
-	private ArrayList<Plant> plants;
+	private List<Plant> plants;
 	private ArrayList<Obstacle> obstacles;
 	
 	private int worldHeight;
@@ -46,9 +46,9 @@ public class World {
 		 * scan.close();
 		 */
 
-		int numBugs = 20;
+		int numBugs = 30;
 		int numPlants = 20;
-		int numObstacles = 40;
+		int numObstacles = 30;
 
 		/*
 		 * PRINT VERSION // create bugs (with random positions), add to bugs
@@ -104,12 +104,12 @@ public class World {
 
 		}
 
-		// create plants (all start at size 0) at random positions
+		// create plants (all start at size 100) at random positions
 		for (int i = 0; i < numPlants; i++) {
 			int x = 1 + (int) (Math.random() * worldWidth);
 			int y = 1 + (int) (Math.random() * worldHeight);
 
-			this.plants.add(new Plant(0, x, y));
+			this.plants.add(new Plant(100, x, y));
 		}
 
 		// create obstacles at random positions
@@ -222,11 +222,32 @@ public class World {
 			} else {
 				obstacles.add(new DeadBug(b.getX(), b.getY()));
 			}
+			
 		}
 		
 		// set temp arrayList as bugs ArrayList
 		this.bugs = livingBugs;
 
+		// remove level 0 plants
+		List<Plant> livingPlants = new ArrayList<Plant>();
+		for (Plant p: this.plants) {
+			if (p.getSize() > 0) {
+				livingPlants.add(p);
+			}
+		}
+		
+		this.plants = livingPlants;
+		
+		int randX = 0;
+		int randY = 0;
+		
+		// ensure there are always at least 10 plants
+		while (this.plants.size() < 10) {
+			randX = 1 + (int) (Math.random() * worldWidth);
+			randY = 1 + (int) (Math.random() * worldHeight);
+			plants.add(new Plant(50, randX, randY));
+		}
+		
 		// make plants grow
 		for (Plant p : this.plants) {
 			p.grow();
@@ -324,11 +345,20 @@ public class World {
 		return this.bugs;
 	}
 
-	public ArrayList<Plant> getPlants() {
+	public List<Plant> getPlants() {
 		return this.plants;
 	}
 
 	public ArrayList<Obstacle> getObstacles() {
 		return this.obstacles;
+	}
+	
+	public List<BugWorldObject> getAllObjects() {
+		List<BugWorldObject> objects = new ArrayList<BugWorldObject>();
+		objects.addAll(bugs);
+		objects.addAll(obstacles);
+		objects.addAll(plants);
+		
+		return objects;
 	}
 }

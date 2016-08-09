@@ -5,7 +5,7 @@ public class FlyingBug extends Bug {
 		super();
 		this.species = "fly";
 		this.symbol = 'F';
-		this.smellRange = 4;
+		this.smellRange = 6;
 		
 	}
 	

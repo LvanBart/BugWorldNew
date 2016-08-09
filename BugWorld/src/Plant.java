@@ -5,7 +5,7 @@ public class Plant extends BugWorldObject{
 	private int y;
 
 	public Plant() {
-		this.size = 0;
+		this.size = 100;
 		this.x = 1;
 		this.y = 1;
 		this.symbol = 'P';
@@ -14,8 +14,8 @@ public class Plant extends BugWorldObject{
 	public Plant(int size, int x, int y) {
 		if (size < 0) {
 			this.size = 0;
-		} else if (size > 9) {
-			this.size = 9;
+		} else if (size > 100) {
+			this.size = 100;
 		} else {
 			this.size = size;
 		}
@@ -40,7 +40,7 @@ public class Plant extends BugWorldObject{
 
 	// causes plant's size to increase by 1, to a maximum of 9
 	public void grow () {
-		if (this.size < 9) {
+		if (this.size < 100) {
 			this.size ++;
 		}
 	}

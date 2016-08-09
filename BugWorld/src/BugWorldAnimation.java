@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,77 +26,27 @@ public class BugWorldAnimation extends Application {
 
 	int width = 600, height = 600;
 	int enlargementFactor = 30;
+	List<BugWorldObject> allObjects;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-
 		World world1 = new World(width / enlargementFactor, height / enlargementFactor);
 
 		// get object lists from World
-		List<Bug> bugs = world1.getBugs();
-		List<Plant> plants = world1.getPlants();
-		List<Obstacle> obstacles = world1.getObstacles();
-
+		allObjects = world1.getAllObjects();
 
 		// List<ImageView> images = new ArrayList<ImageView>();
 		Map<ImageView, BugWorldObject> images = new HashMap<ImageView, BugWorldObject>();
-		
 
-		for (Bug b: bugs) {
-			// for general bug
-			String fileName = "bug_image.png";
-			
-			// if crawlingBug
-			if (b.getSymbol() == 'C') {
-				fileName = "crawling_bug_image.png";
-			} else if (b.getSymbol() == 'J') {
-				fileName = "jumping_bug_image.png";
-			} else if (b.getSymbol() == 'F') {
-				fileName = "flying_bug_image.png";
-			}
-			
-			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
-			
-			i.setFitWidth(enlargementFactor);
-			i.setFitHeight(enlargementFactor);
-			i.setX(b.getX() * enlargementFactor);
-			i.setY(b.getY() * enlargementFactor);
-
-			images.put(i, b);
+		for (BugWorldObject object : allObjects) {
+			images.put(makeImageView(object), object);
 		}
-
-		for (Plant p: plants) {
-			ImageView i = new ImageView(new Image(getClass().getResourceAsStream("plant_image.png")));
-			i.setFitWidth(enlargementFactor);
-			i.setFitHeight(enlargementFactor);
-			i.setX(p.getX() * enlargementFactor);
-			i.setY(p.getY() * enlargementFactor);
-			
-			images.put(i, p);
-		}
-
-		for (Obstacle o: obstacles) {
-			String fileName = "wall_image.png";
-			
-			if (o.getSymbol() == 'X') {
-				fileName = "tombstone_image";
-			}
-			
-			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
-			i.setFitWidth(enlargementFactor);
-			i.setFitHeight(enlargementFactor);
-			i.setX(o.getX() * enlargementFactor);
-			i.setY(o.getY() * enlargementFactor);
-			
-			images.put(i, o);
-		}
-
 
 		// add all objects to group
 		Group root = new Group();
-		
-		for (ImageView i: images.keySet()) {
+
+		for (ImageView i : images.keySet()) {
 			root.getChildren().add(i);
 		}
 
@@ -105,16 +56,43 @@ public class BugWorldAnimation extends Application {
 			@Override
 			public void handle(ActionEvent t) {
 				world1.updateWorld();
+
+				// update object list
+				allObjects = world1.getAllObjects();
+
+				// find which objects are no longer in bug world, and which
+				// objects are new
+				List<ImageView> toRemove = new ArrayList<ImageView>();
 				
-				
-				for (ImageView i: images.keySet()) {
+				// if there is an object which has been added to bug world, add it to graphical bug world
+				for (BugWorldObject object: allObjects) {
+					if (!images.containsValue(object)) {
+						ImageView iv = makeImageView(object);
+						images.put(iv, object);
+						root.getChildren().add(iv);
+					}
+				}
+
+				for (ImageView i : images.keySet()) {
+					// if object not in bug world, add to roRemove list
+					if (!allObjects.contains(images.get(i))) {
+						toRemove.add(i);
+					}
+				}
+
+				for (ImageView i : toRemove) {
+					images.remove(i);
+					root.getChildren().remove(i);
+				}
+
+				for (ImageView i : images.keySet()) {
+
 					int newX = images.get(i).getX();
 					int newY = images.get(i).getY();
-					
+
 					i.setX(newX * enlargementFactor);
 					i.setY(newY * enlargementFactor);
 				}
-
 
 			}
 		});
@@ -172,6 +150,39 @@ public class BugWorldAnimation extends Application {
 		primaryStage.show();
 	}
 
+	public ImageView makeImageView(BugWorldObject object) {
+		String fileName = "";
+
+		if (object.getSymbol() == 'C') {
+			fileName = "crawling_bug_image.png";
+		} else if (object.getSymbol() == 'J') {
+			fileName = "jumping_bug_image.png";
+		} else if (object.getSymbol() == 'F') {
+			fileName = "flying_bug_image.png";
+		} else if (object.getSymbol() == 'B') {
+			fileName = "bug_image.png";
+		} else if (object.getSymbol() == 'P') {
+			fileName = "plant_image.png";
+		} else if (object.getSymbol() == 'O') {
+			fileName = "wall_image.png";
+		} else if (object.getSymbol() == 'X') {
+			fileName = "tombstone_image.png";
+		}
+
+		if (!fileName.equals("")) {
+			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
+
+			i.setFitWidth(enlargementFactor);
+			i.setFitHeight(enlargementFactor);
+			i.setX(object.getX() * enlargementFactor);
+			i.setY(object.getY() * enlargementFactor);
+
+			return i;
+		}
+
+		return null;
+
+	}
 
 	public static void main(String[] args) {
 		launch(args);

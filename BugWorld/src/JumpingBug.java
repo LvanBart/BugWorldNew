@@ -5,7 +5,7 @@ public class JumpingBug extends Bug {
 		super();
 		this.species = "grasshopper";
 		this.symbol = 'J';
-		this.smellRange = 3;
+		this.smellRange = 4;
 	}
 	
 	public JumpingBug(String species, String name, int x, int y, int energy, int id) {
