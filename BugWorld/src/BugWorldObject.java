@@ -10,6 +10,11 @@ public class BugWorldObject {
 		this.y = 100;
 	}
 	
+	public BugWorldObject(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public char getSymbol() {
 		return this.symbol;
 	}

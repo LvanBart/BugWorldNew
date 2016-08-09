@@ -418,4 +418,47 @@ public class World {
 		
 		return true;
 	}
+	
+	public void addObject(char objectSymbol) {
+		if (getAllObjects().size() >= worldWidth * worldHeight) {
+			return;
+		}
+		
+		int randX = 1 + (int) (Math.random() * worldWidth);
+		int randY = 1 + (int) (Math.random() * worldHeight);
+
+		while (!cellEmpty(randX, randY)) {
+			randX = 1 + (int) (Math.random() * worldWidth);
+			randY = 1 + (int) (Math.random() * worldHeight);
+		}
+
+		
+		switch (objectSymbol) {
+		case 'B':
+			bugs.add(new Bug(randX, randY));
+			break;
+			
+		case 'C':
+			bugs.add(new CrawlingBug(randX, randY));
+			break;
+			
+		case 'J':
+			bugs.add(new JumpingBug(randX, randY));
+			break;
+			
+		case 'F':
+			bugs.add(new FlyingBug(randX, randY));
+			break;
+			
+		case 'O':
+			obstacles.add(new Obstacle(randX, randY));
+			break;
+			
+		case 'P':
+			plants.add(new Plant(50, randX, randY));
+			break;
+		}
+		
+		
+	}
 }

@@ -1,7 +1,6 @@
 
 import java.util.Scanner;
 
-import javafx.scene.image.ImageView;
 
 public class Bug extends BugWorldObject {
 
@@ -24,6 +23,16 @@ public class Bug extends BugWorldObject {
 		this.id = 12345;
 		this.smellRange = 2;
 
+	}
+	
+	public Bug(int x, int y) {
+		super(x, y);
+		this.species = "ant";
+		this.name = "Gerald";
+		this.symbol = 'B';
+		this.energy = 100;
+		this.id = 12345;
+		this.smellRange = 2;
 	}
 
 	public Bug(String species, String name, int x, int y, int energy, int id, int smellRange) {
