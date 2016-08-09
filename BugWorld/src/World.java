@@ -4,8 +4,7 @@ import java.util.List;
 // import java.util.Scanner;
 
 public class World {
-	// private char[] symbols = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-	// 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 't', 'u'};
+	
 	private List<Bug> bugs;
 	private List<Plant> plants;
 	private ArrayList<Obstacle> obstacles;
@@ -47,7 +46,7 @@ public class World {
 		 */
 
 		int numBugs = 30;
-		int numPlants = 20;
+		int numPlants = 30;
 		int numObstacles = 30;
 
 		/*
@@ -65,6 +64,12 @@ public class World {
 		for (int i = 0; i < numBugs; i++) {
 			int x = 1 + (int) (Math.random() * worldWidth);
 			int y = 1 + (int) (Math.random() * worldHeight);
+			
+			while (!cellEmpty(x, y)) {
+				x = 1 + (int) (Math.random() * worldWidth);
+				y = 1 + (int) (Math.random() * worldHeight);
+			}
+			
 			Bug bug1 = new Bug();
 			bug1.setX(x);
 			bug1.setY(y);
@@ -75,6 +80,12 @@ public class World {
 			if (i < numBugs) {
 				x = 1 + (int) (Math.random() * worldWidth);
 				y = 1 + (int) (Math.random() * worldHeight);
+				
+				while (!cellEmpty(x, y)) {
+					x = 1 + (int) (Math.random() * worldWidth);
+					y = 1 + (int) (Math.random() * worldHeight);
+				}
+				
 				Bug bug2 = new CrawlingBug();
 				this.bugs.add(bug2);
 				bug2.setX(x);
@@ -85,6 +96,12 @@ public class World {
 			if (i < numBugs) {
 				x = 1 + (int) (Math.random() * worldWidth);
 				y = 1 + (int) (Math.random() * worldHeight);
+				
+				while (!cellEmpty(x, y)) {
+					x = 1 + (int) (Math.random() * worldWidth);
+					y = 1 + (int) (Math.random() * worldHeight);
+				}
+				
 				Bug bug3 = new JumpingBug();
 				this.bugs.add(bug3);
 				bug3.setX(x);
@@ -95,6 +112,12 @@ public class World {
 			if (i < numBugs) {
 				x = 1 + (int) (Math.random() * worldWidth);
 				y = 1 + (int) (Math.random() * worldHeight);
+				
+				while (!cellEmpty(x, y)) {
+					x = 1 + (int) (Math.random() * worldWidth);
+					y = 1 + (int) (Math.random() * worldHeight);
+				}
+				
 				Bug bug4 = new FlyingBug();
 				this.bugs.add(bug4);
 				bug4.setX(x);
@@ -108,6 +131,11 @@ public class World {
 		for (int i = 0; i < numPlants; i++) {
 			int x = 1 + (int) (Math.random() * worldWidth);
 			int y = 1 + (int) (Math.random() * worldHeight);
+			
+			while (!cellEmpty(x, y)) {
+				x = 1 + (int) (Math.random() * worldWidth);
+				y = 1 + (int) (Math.random() * worldHeight);
+			}
 
 			this.plants.add(new Plant(100, x, y));
 		}
@@ -116,6 +144,11 @@ public class World {
 		for (int i = 0; i < numObstacles; i++) {
 			int x = 1 + (int) (Math.random() * worldWidth);
 			int y = 1 + (int) (Math.random() * worldHeight);
+			
+			while (!cellEmpty(x, y)) {
+				x = 1 + (int) (Math.random() * worldWidth);
+				y = 1 + (int) (Math.random() * worldHeight);
+			}
 
 			this.obstacles.add(new Obstacle(x, y));
 		}
@@ -236,6 +269,12 @@ public class World {
 				if (p.getSize() == 100) {
 					int randX = 1 + (int) (Math.random() * worldWidth);
 					int randY = 1 + (int) (Math.random() * worldHeight);
+					
+					while (!cellEmpty(randX, randY)) {
+						randX = 1 + (int) (Math.random() * worldWidth);
+						randY = 1 + (int) (Math.random() * worldHeight);
+					}
+					
 					livingPlants.add(new Plant(50, randX, randY));
 				}
 				
@@ -366,5 +405,17 @@ public class World {
 		objects.addAll(plants);
 		
 		return objects;
+	}
+	
+	public boolean cellEmpty(int x, int y) {
+		List <BugWorldObject> objects = getAllObjects();
+		
+		for (BugWorldObject o: objects) {
+			if (o.getX() == x && o.getY() == y) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

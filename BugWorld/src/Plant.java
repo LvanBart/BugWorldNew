@@ -5,7 +5,7 @@ public class Plant extends BugWorldObject{
 	private int y;
 
 	public Plant() {
-		this.size = 50;
+		this.size = 30;
 		this.x = 1;
 		this.y = 1;
 		this.symbol = 'P';
@@ -46,7 +46,7 @@ public class Plant extends BugWorldObject{
 	// causes plant's size to decrease by 2, to a minimum of 0
 	public void shrink () {
 		if (this.size > 0) {
-			this.size -= 5;
+			this.size -= 10;
 		}
 	}
 

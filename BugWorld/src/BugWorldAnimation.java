@@ -12,6 +12,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -96,6 +99,24 @@ public class BugWorldAnimation extends Application {
 
 			}
 		});
+		
+		// make menu
+		MenuBar menuBar = new MenuBar();
+		menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+		
+		Menu menu1 = new Menu("1");
+		
+		MenuItem menuItem1 = new MenuItem("a");
+		MenuItem menuItem2 = new MenuItem("b");
+		MenuItem menuItem3 = new MenuItem("c");
+		menu1.getItems().addAll(menuItem1, menuItem2, menuItem3);
+		
+		
+		Menu menu2 = new Menu("2");
+		Menu menu3 = new Menu("3");
+		
+		menuBar.getMenus().addAll(menu1, menu2, menu3);
+		root.getChildren().add(menuBar);
 
 		Timeline tl = new Timeline(frame);
 		tl.setCycleCount(javafx.animation.Animation.INDEFINITE);
