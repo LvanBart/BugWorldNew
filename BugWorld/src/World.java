@@ -233,12 +233,18 @@ public class World {
 		for (Plant p: this.plants) {
 			if (p.getSize() > 0) {
 				livingPlants.add(p);
+				if (p.getSize() == 100) {
+					int randX = 1 + (int) (Math.random() * worldWidth);
+					int randY = 1 + (int) (Math.random() * worldHeight);
+					livingPlants.add(new Plant(50, randX, randY));
+				}
+				
 			}
 		}
 		
 		this.plants = livingPlants;
 		
-		int randX = 0;
+		/*int randX = 0;
 		int randY = 0;
 		
 		// ensure there are always at least 10 plants
@@ -246,7 +252,7 @@ public class World {
 			randX = 1 + (int) (Math.random() * worldWidth);
 			randY = 1 + (int) (Math.random() * worldHeight);
 			plants.add(new Plant(50, randX, randY));
-		}
+		} */
 		
 		// make plants grow
 		for (Plant p : this.plants) {
