@@ -111,6 +111,12 @@ public class BugWorldAnimation extends Application {
 			@Override
 			public void handle(ActionEvent t) {
 				curWorld.updateWorld();
+				
+				// if no bugs left, ends current bugWorld
+				if (curWorld.getBugs().size() == 0) {
+					// implement this method
+					
+				}
 
 				// update object list
 				allObjects = curWorld.getAllObjects();
@@ -183,7 +189,7 @@ public class BugWorldAnimation extends Application {
 				grid.setVgap(30);
 				grid.setHgap(30);
 				
-				Scene editNumsScene = new Scene(pane, 400, 400);
+				Scene editNumsScene = new Scene(pane, 400, 300);
 				newWorldDialog.setScene(editNumsScene);
 				newWorldDialog.show();
 				
@@ -277,8 +283,8 @@ public class BugWorldAnimation extends Application {
 
 		// add buttons
 		Button playBtn = new Button("Play");
-		playBtn.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-		playBtn.setTextFill(Color.WHITE);
+		/* playBtn.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		playBtn.setTextFill(Color.WHITE); */
 		playBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -288,8 +294,8 @@ public class BugWorldAnimation extends Application {
 		});
 
 		Button pauseBtn = new Button("Pause");
-		pauseBtn.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-		pauseBtn.setTextFill(Color.WHITE);
+		/* pauseBtn.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+		pauseBtn.setTextFill(Color.WHITE); */
 		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -299,8 +305,8 @@ public class BugWorldAnimation extends Application {
 		});
 
 		Button stopBtn = new Button("Stop");
-		stopBtn.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-		stopBtn.setTextFill(Color.WHITE);
+		/* stopBtn.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+		stopBtn.setTextFill(Color.WHITE); */
 		stopBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
