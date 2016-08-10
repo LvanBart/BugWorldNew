@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -35,17 +38,58 @@ public class BugWorldAnimation extends Application {
 
 	int width = 600, height = 600;
 	int enlargementFactor = 30;
+	
 	List<BugWorldObject> allObjects;
+	World curWorld;
+	Scene curScene;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("bug_image.png")));
 
-		World world1 = new World(width / enlargementFactor, height / enlargementFactor);
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("bug_image.png")));
+		startBugWorld(primaryStage, 20, 20, 20);
+		
+	}
+
+	public ImageView makeImageView(BugWorldObject object) {
+		String fileName = "";
+
+		if (object.getSymbol() == 'C') {
+			fileName = "crawling_bug_image.png";
+		} else if (object.getSymbol() == 'J') {
+			fileName = "jumping_bug_image.png";
+		} else if (object.getSymbol() == 'F') {
+			fileName = "flying_bug_image.png";
+		} else if (object.getSymbol() == 'B') {
+			fileName = "bug_image.png";
+		} else if (object.getSymbol() == 'P') {
+			fileName = "plant_image.png";
+		} else if (object.getSymbol() == 'O') {
+			fileName = "wall_image.png";
+		} else if (object.getSymbol() == 'X') {
+			fileName = "tombstone_image.png";
+		}
+
+		if (!fileName.equals("")) {
+			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
+
+			i.setFitWidth(enlargementFactor);
+			i.setFitHeight(enlargementFactor);
+			i.setX(object.getX() * enlargementFactor);
+			i.setY(object.getY() * enlargementFactor);
+
+			return i;
+		}
+
+		return null;
+
+	}
+	
+	public void startBugWorld(Stage primaryStage, int numBugs, int numPlants, int numObstacles) {
+		curWorld = new World(width / enlargementFactor, height / enlargementFactor, numBugs, numPlants, numObstacles);
 
 		// get object lists from World
-		allObjects = world1.getAllObjects();
+		allObjects = curWorld.getAllObjects();
 
 		// List<ImageView> images = new ArrayList<ImageView>();
 		Map<ImageView, BugWorldObject> images = new HashMap<ImageView, BugWorldObject>();
@@ -66,10 +110,10 @@ public class BugWorldAnimation extends Application {
 
 			@Override
 			public void handle(ActionEvent t) {
-				world1.updateWorld();
+				curWorld.updateWorld();
 
 				// update object list
-				allObjects = world1.getAllObjects();
+				allObjects = curWorld.getAllObjects();
 
 				// find which objects are no longer in bug world, and which
 				// objects are new
@@ -130,29 +174,26 @@ public class BugWorldAnimation extends Application {
 				newWorldDialog.initModality(Modality.APPLICATION_MODAL);
 				newWorldDialog.initOwner(primaryStage);
 				
-				AnchorPane pane = new AnchorPane();
+				VBox pane = new VBox();
+				pane.setSpacing(30);
+				
 				GridPane grid = new GridPane();
-				AnchorPane.setTopAnchor(grid, 10.0);
 				
 				pane.getChildren().add(grid);
 				grid.setVgap(30);
+				grid.setHgap(30);
 				
-				Scene editNumsScene = new Scene(pane, 300, 300);
+				Scene editNumsScene = new Scene(pane, 400, 400);
 				newWorldDialog.setScene(editNumsScene);
 				newWorldDialog.show();
 				
 				Label bugsLabel = new Label("Number of bugs:");
-				Label plantsLabel = new Label("Number of bugs:");
-				Label obstaclesLabel = new Label("Number of bugs:");
+				Label plantsLabel = new Label("Number of plants:");
+				Label obstaclesLabel = new Label("Number of obstacles:");
 				
 				TextField bugsTF = new TextField();
 				TextField plantsTF = new TextField();
 				TextField obstaclesTF = new TextField();
-				
-				
-				ButtonBar btnBar = new ButtonBar();
-				AnchorPane.setBottomAnchor(btnBar, 20.0);
-				AnchorPane.setRightAnchor(btnBar, 10.0);
 				
 				Button cancelBtn = new Button("Cancel");
 				cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -165,12 +206,34 @@ public class BugWorldAnimation extends Application {
 					}
 				});
 				
+				Text errorText = new Text();
+				errorText.setFill(Color.RED);
+				
+				ButtonBar btnBar = new ButtonBar();
+				
+				pane.getChildren().add(btnBar);
+				pane.getChildren().add(errorText);
+				
+				
+
 				Button okBtn = new Button("Ok");
 				okBtn.setOnAction(new EventHandler<ActionEvent>() {
 					
 					@Override
 					public void handle(ActionEvent arg0) {
-						new BugWorldAnimation();
+						
+						try {
+							
+							int numBugs = Integer.parseInt(bugsTF.getText());
+							int numPlants = Integer.parseInt(plantsTF.getText());
+							int numObstacles = Integer.parseInt(obstaclesTF.getText());
+							
+							startBugWorld(primaryStage, numBugs, numPlants, numObstacles);
+							newWorldDialog.close();
+							
+						} catch (Exception e) {
+							errorText.setText("Enter an integer.");
+						}
 						
 					}
 				});
@@ -187,7 +250,6 @@ public class BugWorldAnimation extends Application {
 				grid.add(obstaclesTF, 2, 3);
 				
 				
-				pane.getChildren().add(btnBar);
 				
 			}
 		});
@@ -260,44 +322,6 @@ public class BugWorldAnimation extends Application {
 		primaryStage.setTitle("Bug World");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-	}
-
-	public ImageView makeImageView(BugWorldObject object) {
-		String fileName = "";
-
-		if (object.getSymbol() == 'C') {
-			fileName = "crawling_bug_image.png";
-		} else if (object.getSymbol() == 'J') {
-			fileName = "jumping_bug_image.png";
-		} else if (object.getSymbol() == 'F') {
-			fileName = "flying_bug_image.png";
-		} else if (object.getSymbol() == 'B') {
-			fileName = "bug_image.png";
-		} else if (object.getSymbol() == 'P') {
-			fileName = "plant_image.png";
-		} else if (object.getSymbol() == 'O') {
-			fileName = "wall_image.png";
-		} else if (object.getSymbol() == 'X') {
-			fileName = "tombstone_image.png";
-		}
-
-		if (!fileName.equals("")) {
-			ImageView i = new ImageView(new Image(getClass().getResourceAsStream(fileName)));
-
-			i.setFitWidth(enlargementFactor);
-			i.setFitHeight(enlargementFactor);
-			i.setX(object.getX() * enlargementFactor);
-			i.setY(object.getY() * enlargementFactor);
-
-			return i;
-		}
-
-		return null;
-
-	}
-	
-	public void startBugWorld() {
-		
 	}
 	
 	public void stopBugWorld() {

@@ -11,8 +11,12 @@ public class World {
 	
 	private int worldHeight;
 	private int worldWidth;
+	
+	int numBugs = 15;
+	int numPlants = 40;
+	int numObstacles = 20;
 
-	public World(int width, int height) {
+	public World(int width, int height, int numBugs, int numPlants, int numObstacles) {
 		this.bugs = new ArrayList<Bug>();
 		this.plants = new ArrayList<Plant>();
 		this.obstacles = new ArrayList<Obstacle>();
@@ -45,9 +49,7 @@ public class World {
 		 * scan.close();
 		 */
 
-		int numBugs = 15;
-		int numPlants = 40;
-		int numObstacles = 20;
+		
 
 		/*
 		 * PRINT VERSION // create bugs (with random positions), add to bugs
