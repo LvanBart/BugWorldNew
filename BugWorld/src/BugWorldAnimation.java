@@ -21,7 +21,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -33,6 +35,8 @@ public class BugWorldAnimation extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("bug_image.png")));
 
 		World world1 = new World(width / enlargementFactor, height / enlargementFactor);
 
@@ -77,7 +81,7 @@ public class BugWorldAnimation extends Application {
 				}
 
 				for (ImageView i : images.keySet()) {
-					// if object not in bug world, add to roRemove list
+					// if object not in bug world, add to toRemove list
 					if (!allObjects.contains(images.get(i))) {
 						toRemove.add(i);
 					}
@@ -100,16 +104,49 @@ public class BugWorldAnimation extends Application {
 			}
 		});
 		
+		Timeline tl = new Timeline(frame);
+		tl.setCycleCount(javafx.animation.Animation.INDEFINITE);
+		tl.play();
+		
 		// make menu
 		MenuBar menuBar = new MenuBar();
 		menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		
 		Menu menu1 = new Menu("1");
 		
-		MenuItem menuItem1 = new MenuItem("a");
-		MenuItem menuItem2 = new MenuItem("b");
-		MenuItem menuItem3 = new MenuItem("c");
-		menu1.getItems().addAll(menuItem1, menuItem2, menuItem3);
+		MenuItem editNumsItem = new MenuItem("New Bug World");
+		editNumsItem.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent arg0) {
+				final Stage newWorldDialog = new Stage();
+				tl.pause();
+				
+				newWorldDialog.setTitle("New Bug World");
+				newWorldDialog.initModality(Modality.APPLICATION_MODAL);
+				newWorldDialog.initOwner(primaryStage);
+				
+				VBox box = new VBox();
+				
+				Scene editNumsScene = new Scene(box, 300, 300);
+				newWorldDialog.setScene(editNumsScene);
+				newWorldDialog.show();
+				
+			}
+		});
+		
+		MenuItem exitItem = new MenuItem("Exit");
+		exitItem.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent arg0) {
+				primaryStage.close();
+				
+			}
+		});
+		
+
+		menu1.getItems().addAll(editNumsItem, exitItem);
 		
 		
 		Menu menu2 = new Menu("2");
@@ -118,9 +155,6 @@ public class BugWorldAnimation extends Application {
 		menuBar.getMenus().addAll(menu1, menu2, menu3);
 		root.getChildren().add(menuBar);
 
-		Timeline tl = new Timeline(frame);
-		tl.setCycleCount(javafx.animation.Animation.INDEFINITE);
-		tl.play();
 
 		// add buttons
 		Button playBtn = new Button("Play");
