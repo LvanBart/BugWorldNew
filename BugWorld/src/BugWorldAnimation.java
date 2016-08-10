@@ -12,16 +12,20 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -126,11 +130,64 @@ public class BugWorldAnimation extends Application {
 				newWorldDialog.initModality(Modality.APPLICATION_MODAL);
 				newWorldDialog.initOwner(primaryStage);
 				
-				VBox box = new VBox();
+				AnchorPane pane = new AnchorPane();
+				GridPane grid = new GridPane();
+				AnchorPane.setTopAnchor(grid, 10.0);
 				
-				Scene editNumsScene = new Scene(box, 300, 300);
+				pane.getChildren().add(grid);
+				grid.setVgap(30);
+				
+				Scene editNumsScene = new Scene(pane, 300, 300);
 				newWorldDialog.setScene(editNumsScene);
 				newWorldDialog.show();
+				
+				Label bugsLabel = new Label("Number of bugs:");
+				Label plantsLabel = new Label("Number of bugs:");
+				Label obstaclesLabel = new Label("Number of bugs:");
+				
+				TextField bugsTF = new TextField();
+				TextField plantsTF = new TextField();
+				TextField obstaclesTF = new TextField();
+				
+				
+				ButtonBar btnBar = new ButtonBar();
+				AnchorPane.setBottomAnchor(btnBar, 20.0);
+				AnchorPane.setRightAnchor(btnBar, 10.0);
+				
+				Button cancelBtn = new Button("Cancel");
+				cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
+					
+					@Override
+					public void handle(ActionEvent arg0) {
+						newWorldDialog.close();
+						tl.play();
+						
+					}
+				});
+				
+				Button okBtn = new Button("Ok");
+				okBtn.setOnAction(new EventHandler<ActionEvent>() {
+					
+					@Override
+					public void handle(ActionEvent arg0) {
+						new BugWorldAnimation();
+						
+					}
+				});
+				
+				btnBar.getButtons().add(cancelBtn);
+				btnBar.getButtons().add(okBtn);
+				btnBar.setPadding(new Insets(0, 10, 10, 10));
+				
+				grid.add(bugsLabel, 1, 1);
+				grid.add(plantsLabel, 1, 2);
+				grid.add(obstaclesLabel, 1, 3);
+				grid.add(bugsTF, 2, 1);
+				grid.add(plantsTF, 2, 2);
+				grid.add(obstaclesTF, 2, 3);
+				
+				
+				pane.getChildren().add(btnBar);
 				
 			}
 		});
@@ -237,6 +294,14 @@ public class BugWorldAnimation extends Application {
 
 		return null;
 
+	}
+	
+	public void startBugWorld() {
+		
+	}
+	
+	public void stopBugWorld() {
+		
 	}
 
 	public static void main(String[] args) {
